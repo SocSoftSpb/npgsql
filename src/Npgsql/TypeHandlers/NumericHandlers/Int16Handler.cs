@@ -17,7 +17,7 @@ namespace Npgsql.TypeHandlers.NumericHandlers
     /// should be considered somewhat unstable, and  may change in breaking ways, including in non-major releases.
     /// Use it at your own risk.
     /// </remarks>
-    [TypeMapping("smallint", NpgsqlDbType.Smallint, new[] { DbType.Int16, DbType.Byte, DbType.SByte }, new[] { typeof(short), typeof(byte), typeof(sbyte) }, DbType.Int16)]
+    [TypeMapping("smallint", NpgsqlDbType.Smallint, new[] { DbType.Int16, DbType.SByte }, new[] { typeof(short), typeof(sbyte) }, DbType.Int16)]
     public class Int16Handler : NpgsqlSimpleTypeHandler<short>,
         INpgsqlSimpleTypeHandler<byte>, INpgsqlSimpleTypeHandler<sbyte>, INpgsqlSimpleTypeHandler<int>, INpgsqlSimpleTypeHandler<long>,
         INpgsqlSimpleTypeHandler<float>, INpgsqlSimpleTypeHandler<double>, INpgsqlSimpleTypeHandler<decimal>

@@ -68,6 +68,11 @@ namespace NpgsqlTypes
         [BuiltInPostgresType("money", PostgresTypeOIDs.Money)]
         Money = 12,
 
+        /// <summary>
+        /// Corresponds to the PostgreSQL "tinyint" type for the tinyint module.
+        /// </summary>
+        Tinyint = 1001,   // Extension type
+
         #endregion
 
         #region Boolean Type
