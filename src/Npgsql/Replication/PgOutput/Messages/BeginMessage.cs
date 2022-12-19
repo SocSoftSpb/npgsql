@@ -37,7 +37,7 @@ namespace Npgsql.Replication.PgOutput.Messages
         }
 
         /// <inheritdoc />
-#if NETSTANDARD2_0 || NETSTANDARD2_1 || NETCOREAPP3_1
+#if NETSTANDARD2_0 || NETSTANDARD2_1 || NETCOREAPP3_1 || NET472
         public override PgOutputReplicationMessage Clone()
 #else
         public override BeginMessage Clone()

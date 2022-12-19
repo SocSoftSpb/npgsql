@@ -1,4 +1,4 @@
-﻿#if NETSTANDARD2_0
+﻿#if NETSTANDARD2_0 || NET472
 using System.Net.Sockets;
 using System.Text;
 

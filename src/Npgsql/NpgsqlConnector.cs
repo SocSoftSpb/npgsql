@@ -847,7 +847,7 @@ namespace Npgsql
                     // cancellation and timeout. On older TFMs, we fake-cancel the operation, i.e. stop waiting
                     // and raise the exception, but the actual connection task is left running.
 
-#if NETSTANDARD2_0 || NETSTANDARD2_1 || NETCOREAPP3_1
+#if NETSTANDARD2_0 || NETSTANDARD2_1 || NETCOREAPP3_1 || NET472
                     await socket.ConnectAsync(endpoint)
                         .WithCancellationAndTimeout(perIpTimeout, cancellationToken);
 #else
@@ -917,7 +917,7 @@ namespace Npgsql
                     ? Settings.TcpKeepAliveInterval
                     : Settings.TcpKeepAliveTime;
 
-#if NETSTANDARD2_0 || NETSTANDARD2_1
+#if NETSTANDARD2_0 || NETSTANDARD2_1 || NET472
                 var timeMilliseconds = timeSeconds * 1000;
                 var intervalMilliseconds = intervalSeconds * 1000;
 

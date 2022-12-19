@@ -98,7 +98,7 @@ namespace Npgsql.Replication.TestDecoding
         /// <inheritdoc />
         public override int GetHashCode()
         {
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NET472
             var hashCode = IncludeXids.GetHashCode();
             hashCode = (hashCode * 397) ^ IncludeTimestamp.GetHashCode();
             hashCode = (hashCode * 397) ^ ForceBinary.GetHashCode();

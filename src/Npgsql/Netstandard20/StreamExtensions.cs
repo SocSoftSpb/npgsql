@@ -1,4 +1,4 @@
-﻿#if NETSTANDARD2_0
+﻿#if NETSTANDARD2_0 || NET472
 using System.Buffers;
 using System.Threading;
 using System.Threading.Tasks;

@@ -794,6 +794,7 @@ Npgsql.PostgresException.InternalQuery.get -> string?
 Npgsql.PostgresException.InvariantSeverity.get -> string!
 Npgsql.PostgresException.Line.get -> string?
 Npgsql.PostgresException.MessageText.get -> string!
+Npgsql.PostgresException.MessageText.set -> void
 Npgsql.PostgresException.Position.get -> int
 Npgsql.PostgresException.PostgresException(string! messageText, string! severity, string! invariantSeverity, string! sqlState) -> void
 Npgsql.PostgresException.PostgresException(string! messageText, string! severity, string! invariantSeverity, string! sqlState, string? detail = null, string? hint = null, int position = 0, int internalPosition = 0, string? internalQuery = null, string? where = null, string? schemaName = null, string? tableName = null, string? columnName = null, string? dataTypeName = null, string? constraintName = null, string? file = null, string? line = null, string? routine = null) -> void
@@ -1317,6 +1318,8 @@ Npgsql.TypeHandlers.NumericHandlers.SingleHandler
 Npgsql.TypeHandlers.NumericHandlers.SingleHandler.SingleHandler(Npgsql.PostgresTypes.PostgresType! postgresType) -> void
 Npgsql.TypeHandlers.NumericHandlers.SingleHandler.ValidateAndGetLength(double value, Npgsql.NpgsqlParameter? parameter) -> int
 Npgsql.TypeHandlers.NumericHandlers.SingleHandler.Write(double value, Npgsql.NpgsqlWriteBuffer! buf, Npgsql.NpgsqlParameter? parameter) -> void
+Npgsql.TypeHandlers.NumericHandlers.TinyintHandler
+Npgsql.TypeHandlers.NumericHandlers.TinyintHandler.TinyintHandler(Npgsql.PostgresTypes.PostgresType! postgresType) -> void
 Npgsql.TypeHandlers.NumericHandlers.UInt32Handler
 Npgsql.TypeHandlers.NumericHandlers.UInt32Handler.UInt32Handler(Npgsql.PostgresTypes.PostgresType! postgresType) -> void
 Npgsql.TypeHandlers.NumericHandlers.UInt64Handler
@@ -1553,6 +1556,7 @@ NpgsqlTypes.NpgsqlDbType.TimestampTZ = 26 -> NpgsqlTypes.NpgsqlDbType
 NpgsqlTypes.NpgsqlDbType.TimestampTz = 26 -> NpgsqlTypes.NpgsqlDbType
 NpgsqlTypes.NpgsqlDbType.TimeTZ = 31 -> NpgsqlTypes.NpgsqlDbType
 NpgsqlTypes.NpgsqlDbType.TimeTz = 31 -> NpgsqlTypes.NpgsqlDbType
+NpgsqlTypes.NpgsqlDbType.Tinyint = 1001 -> NpgsqlTypes.NpgsqlDbType
 NpgsqlTypes.NpgsqlDbType.TsQuery = 46 -> NpgsqlTypes.NpgsqlDbType
 NpgsqlTypes.NpgsqlDbType.TsVector = 45 -> NpgsqlTypes.NpgsqlDbType
 NpgsqlTypes.NpgsqlDbType.Unknown = 40 -> NpgsqlTypes.NpgsqlDbType
@@ -2148,6 +2152,9 @@ override Npgsql.TypeHandlers.NumericHandlers.NumericHandler.Write(decimal value,
 override Npgsql.TypeHandlers.NumericHandlers.SingleHandler.Read(Npgsql.NpgsqlReadBuffer! buf, int len, Npgsql.BackendMessages.FieldDescription? fieldDescription = null) -> float
 override Npgsql.TypeHandlers.NumericHandlers.SingleHandler.ValidateAndGetLength(float value, Npgsql.NpgsqlParameter? parameter) -> int
 override Npgsql.TypeHandlers.NumericHandlers.SingleHandler.Write(float value, Npgsql.NpgsqlWriteBuffer! buf, Npgsql.NpgsqlParameter? parameter) -> void
+override Npgsql.TypeHandlers.NumericHandlers.TinyintHandler.Read(Npgsql.NpgsqlReadBuffer! buf, int len, Npgsql.BackendMessages.FieldDescription? fieldDescription = null) -> byte
+override Npgsql.TypeHandlers.NumericHandlers.TinyintHandler.ValidateAndGetLength(byte value, Npgsql.NpgsqlParameter? parameter) -> int
+override Npgsql.TypeHandlers.NumericHandlers.TinyintHandler.Write(byte value, Npgsql.NpgsqlWriteBuffer! buf, Npgsql.NpgsqlParameter? parameter) -> void
 override Npgsql.TypeHandlers.NumericHandlers.UInt32Handler.Read(Npgsql.NpgsqlReadBuffer! buf, int len, Npgsql.BackendMessages.FieldDescription? fieldDescription = null) -> uint
 override Npgsql.TypeHandlers.NumericHandlers.UInt32Handler.ValidateAndGetLength(uint value, Npgsql.NpgsqlParameter? parameter) -> int
 override Npgsql.TypeHandlers.NumericHandlers.UInt32Handler.Write(uint value, Npgsql.NpgsqlWriteBuffer! buf, Npgsql.NpgsqlParameter? parameter) -> void

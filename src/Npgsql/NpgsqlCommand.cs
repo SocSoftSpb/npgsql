@@ -548,7 +548,7 @@ GROUP BY pg_proc.proargnames, pg_proc.proargtypes, pg_proc.proallargtypes, pg_pr
         /// This will make repeated future executions of this command much faster.
         /// </summary>
         /// <param name="cancellationToken">The token to monitor for cancellation requests. The default value is <see cref="CancellationToken.None"/>.</param>
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NET472
         public Task PrepareAsync(CancellationToken cancellationToken = default)
 #else
         public override Task PrepareAsync(CancellationToken cancellationToken = default)

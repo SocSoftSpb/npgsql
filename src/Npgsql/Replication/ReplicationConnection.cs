@@ -535,7 +535,7 @@ namespace Npgsql.Replication
             }
             finally
             {
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NET472
                 if (_sendFeedbackTimer != null)
                 {
                     var mre = new ManualResetEvent(false);

@@ -605,7 +605,7 @@ namespace Npgsql
             }
         }
 
-#if !NETSTANDARD2_0
+#if !NETSTANDARD2_0 && !NET472
         /// <summary>
         /// Asynchronously begins a database transaction.
         /// </summary>
@@ -711,7 +711,7 @@ namespace Npgsql
         /// Releases the connection. If the connection is pooled, it will be returned to the pool and made available for re-use.
         /// If it is non-pooled, the physical connection will be closed.
         /// </summary>
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NET472
         public Task CloseAsync()
 #else
         public override Task CloseAsync()
@@ -868,7 +868,7 @@ namespace Npgsql
         /// <summary>
         /// Releases all resources used by the <see cref="NpgsqlConnection">NpgsqlConnection</see>.
         /// </summary>
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NET472
         public ValueTask DisposeAsync()
 #else
         public override ValueTask DisposeAsync()

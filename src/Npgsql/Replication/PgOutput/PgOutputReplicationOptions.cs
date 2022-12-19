@@ -96,7 +96,7 @@ namespace Npgsql.Replication.PgOutput
         /// <inheritdoc />
         public override int GetHashCode()
         {
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NET472
             var hashCode = ProtocolVersion.GetHashCode();
             hashCode = (hashCode * 397) ^ PublicationNames.GetHashCode();
             hashCode = (hashCode * 397) ^ Binary.GetHashCode();

@@ -826,7 +826,7 @@ namespace Npgsql
         /// <summary>
         /// Releases the resources used by the <see cref="NpgsqlDataReader">NpgsqlDataReader</see>.
         /// </summary>
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NET472
         public ValueTask DisposeAsync()
 #else
         public override ValueTask DisposeAsync()
@@ -859,7 +859,7 @@ namespace Npgsql
         /// <summary>
         /// Closes the <see cref="NpgsqlDataReader"/> reader, allowing a new command to be executed.
         /// </summary>
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NET472
         public Task CloseAsync()
 #else
         public override Task CloseAsync()

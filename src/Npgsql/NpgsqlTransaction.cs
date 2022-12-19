@@ -138,7 +138,7 @@ namespace Npgsql
         /// Commits the database transaction.
         /// </summary>
         /// <param name="cancellationToken">The token to monitor for cancellation requests. The default value is <see cref="CancellationToken.None"/>.</param>
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NET472
         public Task CommitAsync(CancellationToken cancellationToken = default)
 #else
         public override Task CommitAsync(CancellationToken cancellationToken = default)
@@ -172,7 +172,7 @@ namespace Npgsql
         /// Rolls back a transaction from a pending state.
         /// </summary>
         /// <param name="cancellationToken">The token to monitor for cancellation requests. The default value is <see cref="CancellationToken.None"/>.</param>
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NET472
         public Task RollbackAsync(CancellationToken cancellationToken = default)
 #else
         public override Task RollbackAsync(CancellationToken cancellationToken = default)
@@ -382,7 +382,7 @@ namespace Npgsql
         /// <summary>
         /// Disposes the transaction, rolling it back if it is still pending.
         /// </summary>
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NET472
         public ValueTask DisposeAsync()
 #else
         public override ValueTask DisposeAsync()
