@@ -1,12 +1,12 @@
 ﻿<Project>
   <ItemGroup>
-    <PackageReference Update="System.Runtime.CompilerServices.Unsafe" Version="5.0.0" />
-    <PackageReference Update="System.Text.Json" Version="5.0.1" />
+    <PackageReference Update="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+    <PackageReference Update="System.Text.Json" Version="5.0.2" />
     <PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1" />
     <PackageReference Update="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.1" />
     <PackageReference Update="System.Threading.Channels" Version="4.7.1" />
 
-    <PackageReference Update="System.Text.Encodings.Web" Version="5.0.1" />
+    <PackageReference Update="System.Text.Encodings.Web" Version="6.0.0" />
 
     <!-- Plugins -->
     <PackageReference Update="NetTopologySuite.IO.PostGIS" Version="2.1.0" />

@@ -818,7 +818,11 @@ namespace Npgsql
             // Note that there aren't any timeout-able or cancellable DNS methods
             var endpoints = Path.IsPathRooted(Host)
                 ? new EndPoint[] { new UnixDomainSocketEndPoint(Path.Combine(Host, $".s.PGSQL.{Port}")) }
+#if NET6_0_OR_GREATER
+                : (await Dns.GetHostAddressesAsync(Host, cancellationToken).WithTimeout(timeout))
+#else
                 : (await Dns.GetHostAddressesAsync(Host).WithCancellationAndTimeout(timeout, cancellationToken))
+#endif
                 .Select(a => new IPEndPoint(a, Port)).ToArray();
 
             // Give each IP an equal share of the remaining time
