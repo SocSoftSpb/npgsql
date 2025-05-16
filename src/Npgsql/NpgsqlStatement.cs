@@ -56,6 +56,11 @@ namespace Npgsql
         public List<NpgsqlParameter> InputParameters { get; } = new List<NpgsqlParameter>();
 
         /// <summary>
+        /// Position of this statement in batch text
+        /// </summary>
+        public int PositionInBatch { get; internal set; }
+
+        /// <summary>
         /// The RowDescription message for this query. If null, the query does not return rows (e.g. INSERT)
         /// </summary>
         internal RowDescriptionMessage? Description
@@ -107,6 +112,7 @@ namespace Npgsql
             OID = 0;
             InputParameters.Clear();
             PreparedStatement = null;
+            PositionInBatch = 0;
         }
 
         internal void ApplyCommandComplete(CommandCompleteMessage msg)

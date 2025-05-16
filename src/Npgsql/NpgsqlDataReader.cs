@@ -661,6 +661,7 @@ namespace Npgsql
                 }
 
                 _statements[StatementIndex].ApplyCommandComplete(completed);
+                Command.OnStatementCompleted(_statements[StatementIndex]);
                 goto case BackendMessageCode.EmptyQueryResponse;
 
             case BackendMessageCode.EmptyQueryResponse:

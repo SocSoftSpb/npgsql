@@ -8,7 +8,7 @@ namespace Npgsql
     class SqlQueryParser
     {
         readonly Dictionary<string, int> _paramIndexMap = new Dictionary<string, int>();
-        readonly StringBuilder _rewrittenSql = new StringBuilder();
+        readonly StringBuilder _rewrittenSql = new StringBuilder(512);
 
         /// <summary>
         /// Receives a raw SQL query as passed in by the user, and performs some processing necessary
@@ -56,6 +56,7 @@ namespace Npgsql
             var currTokenBeg = 0;
             var blockCommentLevel = 0;
             var parenthesisLevel = 0;
+            var currentStatementStart = -1;
 
         None:
             if (currCharOfs >= end)
@@ -123,7 +124,7 @@ namespace Npgsql
                 if (IsParamNameChar(ch))
                 {
                     if (currCharOfs - 1 > currTokenBeg)
-                        _rewrittenSql.Append(sql.Slice(currTokenBeg, currCharOfs - 1 - currTokenBeg));
+                        AppendSlice(ref sql, currTokenBeg, currCharOfs - 1 - currTokenBeg);
                     currTokenBeg = currCharOfs++ - 1;
                     goto Param;
                 }
@@ -155,7 +156,7 @@ namespace Npgsql
                             {
                                 // Parameter placeholder does not match a parameter on this command.
                                 // Leave the text as it was in the SQL, it may not be a an actual placeholder
-                                _rewrittenSql.Append(sql.Slice(currTokenBeg, currCharOfs - currTokenBeg));
+                                AppendSlice(ref sql, currTokenBeg, currCharOfs - currTokenBeg);
                                 currTokenBeg = currCharOfs;
                                 if (currCharOfs >= end)
                                     goto Finish;
@@ -417,8 +418,9 @@ namespace Npgsql
             goto Finish;
 
         SemiColon:
-            _rewrittenSql.Append(sql.Slice(currTokenBeg, currCharOfs - currTokenBeg - 1));
+            AppendSlice(ref sql, currTokenBeg, currCharOfs - currTokenBeg - 1);
             statement.SQL = _rewrittenSql.ToString();
+            if (currentStatementStart >= 0) statement.PositionInBatch = currentStatementStart;
             while (currCharOfs < end)
             {
                 ch = sql[currCharOfs];
@@ -439,8 +441,9 @@ namespace Npgsql
             return;
 
         Finish:
-            _rewrittenSql.Append(sql.Slice(currTokenBeg, end - currTokenBeg));
+            AppendSlice(ref sql, currTokenBeg, end - currTokenBeg);
             statement.SQL = _rewrittenSql.ToString();
+            if (currentStatementStart >= 0) statement.PositionInBatch = currentStatementStart;
             if (statements.Count > statementIndex + 1)
                statements.RemoveRange(statementIndex + 1, statements.Count - (statementIndex + 1));
 
@@ -459,6 +462,15 @@ namespace Npgsql
                 }
                 _paramIndexMap.Clear();
                 _rewrittenSql.Clear();
+                currentStatementStart = -1;
+            }
+
+            void AppendSlice(ref ReadOnlySpan<char> spanSql, int start, int length)
+            {
+                if (currentStatementStart == -1)
+                    currentStatementStart = start;
+
+                _rewrittenSql.Append(spanSql.Slice(start, length));
             }
         }
 

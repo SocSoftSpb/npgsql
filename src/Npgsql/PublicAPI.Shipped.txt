@@ -358,6 +358,7 @@ Npgsql.NpgsqlCommand.NpgsqlCommand(string? cmdText, Npgsql.NpgsqlConnection? con
 Npgsql.NpgsqlCommand.NpgsqlCommand(string? cmdText, Npgsql.NpgsqlConnection? connection, Npgsql.NpgsqlTransaction? transaction) -> void
 Npgsql.NpgsqlCommand.Parameters.get -> Npgsql.NpgsqlParameterCollection!
 Npgsql.NpgsqlCommand.Statements.get -> System.Collections.Generic.IReadOnlyList<Npgsql.NpgsqlStatement!>!
+Npgsql.NpgsqlCommand.StatementCompleted -> Npgsql.StatementCompletedEventHandler?
 Npgsql.NpgsqlCommand.Transaction.get -> Npgsql.NpgsqlTransaction?
 Npgsql.NpgsqlCommand.Transaction.set -> void
 Npgsql.NpgsqlCommand.UnknownResultTypeList.get -> bool[]?
@@ -744,10 +745,13 @@ Npgsql.NpgsqlStatement.InputParameters.get -> System.Collections.Generic.List<Np
 Npgsql.NpgsqlStatement.LongRows.get -> ulong
 Npgsql.NpgsqlStatement.NpgsqlStatement() -> void
 Npgsql.NpgsqlStatement.OID.get -> uint
+Npgsql.NpgsqlStatement.PositionInBatch.get -> int
 Npgsql.NpgsqlStatement.Rows.get -> uint
 Npgsql.NpgsqlStatement.SQL.get -> string!
 Npgsql.NpgsqlStatement.SQL.set -> void
 Npgsql.NpgsqlStatement.StatementType.get -> Npgsql.StatementType
+Npgsql.NpgsqlStatementCompletedEventArgs
+Npgsql.NpgsqlStatementCompletedEventArgs.Statement.get -> Npgsql.NpgsqlStatement!
 Npgsql.NpgsqlTransaction
 Npgsql.NpgsqlTransaction.Connection.get -> Npgsql.NpgsqlConnection?
 Npgsql.NpgsqlWriteBuffer
@@ -1114,6 +1118,7 @@ Npgsql.SslMode
 Npgsql.SslMode.Disable = 0 -> Npgsql.SslMode
 Npgsql.SslMode.Prefer = 1 -> Npgsql.SslMode
 Npgsql.SslMode.Require = 2 -> Npgsql.SslMode
+Npgsql.StatementCompletedEventHandler
 Npgsql.StatementType
 Npgsql.StatementType.Copy = 8 -> Npgsql.StatementType
 Npgsql.StatementType.CreateTableAs = 5 -> Npgsql.StatementType
