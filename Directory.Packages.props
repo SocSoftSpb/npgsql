@@ -1,8 +1,13 @@
 <Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    <CentralPackageVersionOverrideEnabled>true</CentralPackageVersionOverrideEnabled>
+  </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.2" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
-    <PackageVersion Include="OpenTelemetry.API" Version="1.7.0" />
+    <PackageVersion Include="OpenTelemetry.API" Version="1.9.0" />
 
     <!-- Compatibility -->
     <PackageVersion Include="System.Text.Json" Version="8.0.5" />
@@ -19,12 +24,12 @@
     <!-- Build -->
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0" />
     <PackageVersion Include="Scriban.Signed" Version="5.9.0 " />
     
     <!-- Tests -->
-    <PackageVersion Include="NUnit" Version="3.14.0" />
+    <PackageVersion Include="NUnit" Version="3.13.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="8.0.1" />
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
@@ -32,9 +37,11 @@
     <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageVersion Include="xunit" Version="2.7.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.7" />
+	<PackageVersion Include="xunit.extensibility.execution" Version="2.7.0" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.3.3" />
     <PackageVersion Include="AdoNet.Specification.Tests" Version="2.0.0-beta.2" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+	<PackageVersion Include="Microsoft.TestPlatform.ObjectModel" Version="17.9.0" />
 
     <!-- Benchmarks -->
     <PackageVersion Include="BenchmarkDotNet" Version="0.13.12" />

@@ -87,6 +87,7 @@ public class LegacyNodaTimeTests : TestBase, IDisposable
 #else
         Assert.Ignore(
             "Legacy NodaTime tests rely on the Npgsql.EnableLegacyTimestampBehavior AppContext switch and can only be run in DEBUG builds");
+        DataSource = null!;
 #endif
     }
 
