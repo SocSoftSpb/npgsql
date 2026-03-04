@@ -298,6 +298,9 @@ Npgsql.NpgsqlBatchCommandCollection.Insert(int index, Npgsql.NpgsqlBatchCommand!
 Npgsql.NpgsqlBatchCommandCollection.Remove(Npgsql.NpgsqlBatchCommand! item) -> bool
 Npgsql.NpgsqlBatchCommandCollection.this[int index].get -> Npgsql.NpgsqlBatchCommand!
 Npgsql.NpgsqlBatchCommandCollection.this[int index].set -> void
+Npgsql.NpgsqlBatchCommandCompletedEventArgs
+Npgsql.NpgsqlBatchCommandCompletedEventArgs.BatchCommand.get -> Npgsql.NpgsqlBatchCommand!
+Npgsql.NpgsqlBatchCommandCompletedEventHandler
 Npgsql.NpgsqlBinaryExporter
 Npgsql.NpgsqlBinaryExporter.Cancel() -> void
 Npgsql.NpgsqlBinaryExporter.CancelAsync() -> System.Threading.Tasks.Task!
@@ -336,6 +339,7 @@ Npgsql.NpgsqlBinaryImporter.WriteRowAsync(System.Threading.CancellationToken can
 Npgsql.NpgsqlCommand
 Npgsql.NpgsqlCommand.AllResultTypesAreUnknown.get -> bool
 Npgsql.NpgsqlCommand.AllResultTypesAreUnknown.set -> void
+Npgsql.NpgsqlCommand.BatchCommandCompleted -> Npgsql.NpgsqlBatchCommandCompletedEventHandler?
 Npgsql.NpgsqlCommand.Connection.get -> Npgsql.NpgsqlConnection?
 Npgsql.NpgsqlCommand.Connection.set -> void
 Npgsql.NpgsqlCommand.CreateParameter() -> Npgsql.NpgsqlParameter!
@@ -784,6 +788,7 @@ Npgsql.PostgresException.InternalQuery.get -> string?
 Npgsql.PostgresException.InvariantSeverity.get -> string!
 Npgsql.PostgresException.Line.get -> string?
 Npgsql.PostgresException.MessageText.get -> string!
+Npgsql.PostgresException.MessageText.set -> void
 Npgsql.PostgresException.Position.get -> int
 Npgsql.PostgresException.PostgresException(string! messageText, string! severity, string! invariantSeverity, string! sqlState) -> void
 Npgsql.PostgresException.PostgresException(string! messageText, string! severity, string! invariantSeverity, string! sqlState, string? detail = null, string? hint = null, int position = 0, int internalPosition = 0, string? internalQuery = null, string? where = null, string? schemaName = null, string? tableName = null, string? columnName = null, string? dataTypeName = null, string? constraintName = null, string? file = null, string? line = null, string? routine = null) -> void
@@ -1312,6 +1317,7 @@ NpgsqlTypes.NpgsqlDbType.TimestampTz = 26 -> NpgsqlTypes.NpgsqlDbType
 NpgsqlTypes.NpgsqlDbType.TimestampTzMultirange = 536870938 -> NpgsqlTypes.NpgsqlDbType
 NpgsqlTypes.NpgsqlDbType.TimestampTzRange = 1073741850 -> NpgsqlTypes.NpgsqlDbType
 NpgsqlTypes.NpgsqlDbType.TimeTz = 31 -> NpgsqlTypes.NpgsqlDbType
+NpgsqlTypes.NpgsqlDbType.Tinyint = 1001 -> NpgsqlTypes.NpgsqlDbType
 NpgsqlTypes.NpgsqlDbType.TsQuery = 46 -> NpgsqlTypes.NpgsqlDbType
 NpgsqlTypes.NpgsqlDbType.TsVector = 45 -> NpgsqlTypes.NpgsqlDbType
 NpgsqlTypes.NpgsqlDbType.Unknown = 40 -> NpgsqlTypes.NpgsqlDbType
@@ -1534,7 +1540,9 @@ override Npgsql.NpgsqlBatchCommand.CommandText.set -> void
 override Npgsql.NpgsqlBatchCommand.CommandType.get -> System.Data.CommandType
 override Npgsql.NpgsqlBatchCommand.CommandType.set -> void
 override Npgsql.NpgsqlBatchCommand.CreateParameter() -> Npgsql.NpgsqlParameter!
+Npgsql.NpgsqlBatchCommand.PositionInBatch.get -> int
 override Npgsql.NpgsqlBatchCommand.RecordsAffected.get -> int
+Npgsql.NpgsqlBatchCommand.Text.get -> string!
 override Npgsql.NpgsqlBatchCommand.ToString() -> string!
 override Npgsql.NpgsqlBatchCommandCollection.Add(System.Data.Common.DbBatchCommand! item) -> void
 override Npgsql.NpgsqlBatchCommandCollection.Clear() -> void

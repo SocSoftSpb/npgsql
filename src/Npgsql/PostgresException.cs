@@ -271,7 +271,7 @@ public sealed class PostgresException : NpgsqlException
     /// <remarks>
     /// Always present.
     /// </remarks>
-    public string MessageText { get; }
+    public string MessageText { get; set; }
 
     /// <summary>
     /// An optional secondary error message carrying more detail about the problem.

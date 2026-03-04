@@ -52,6 +52,8 @@ sealed partial class AdoTypeInfoResolverFactory : PgTypeInfoResolverFactory
             mappings.AddStructType<bool>(DataTypeNames.Bool,
                 static (options, mapping, _) => mapping.CreateInfo(options, new BoolConverter()), isDefault: true);
 
+            mappings.AddStructType<byte>("tinyint",
+                static (options, mapping, _) => mapping.CreateInfo(options, new InternalCharConverter<byte>()), MatchRequirement.DataTypeName);
             // Numeric
             mappings.AddStructType<short>(DataTypeNames.Int2,
                 static (options, mapping, _) => mapping.CreateInfo(options, new Int2Converter<short>()), isDefault: true);
@@ -359,6 +361,7 @@ sealed partial class AdoTypeInfoResolverFactory : PgTypeInfoResolverFactory
             mappings.AddStructArrayType<short>(DataTypeNames.Int2);
             mappings.AddStructArrayType<byte>(DataTypeNames.Int2);
             mappings.AddStructArrayType<sbyte>(DataTypeNames.Int2);
+            mappings.AddStructArrayType<byte>("tinyint");
             mappings.AddStructArrayType<int>(DataTypeNames.Int4);
             mappings.AddStructArrayType<long>(DataTypeNames.Int8);
             mappings.AddStructArrayType<float>(DataTypeNames.Float4);

@@ -32,6 +32,23 @@ public class NumericTypeTests(MultiplexingMode multiplexingMode) : MultiplexingT
     }
 
     [Test]
+    [NonParallelizable]
+    public async Task Tinyint()
+    {
+        await using var conn = await OpenConnectionAsync();
+        await EnsureExtensionAsync(conn, "tinyint");
+
+        await AssertType((byte)8, "8", "tinyint", NpgsqlDbType.Tinyint, DbType.Byte, isDefaultForReading: true, isDefaultForWriting: false);
+
+        await AssertType((short)8,   "8", "tinyint", NpgsqlDbType.Tinyint, DbType.Byte, isDefault: false);
+        await AssertType(8,          "8", "tinyint", NpgsqlDbType.Tinyint, DbType.Byte, isDefault: false);
+        await AssertType(8L,         "8", "tinyint", NpgsqlDbType.Tinyint, DbType.Byte, isDefault: false);
+        await AssertType(8F,         "8", "tinyint", NpgsqlDbType.Tinyint, DbType.Byte, isDefault: false);
+        await AssertType(8D,         "8", "tinyint", NpgsqlDbType.Tinyint, DbType.Byte, isDefault: false);
+        await AssertType(8M,         "8", "tinyint", NpgsqlDbType.Tinyint, DbType.Byte, isDefault: false);
+    }
+
+    [Test]
     public async Task Int32()
     {
         await AssertType(8, "8", "integer", NpgsqlDbType.Integer, DbType.Int32);

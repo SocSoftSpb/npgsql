@@ -33,6 +33,21 @@ sealed class ExtraConversionResolverFactory : PgTypeInfoResolverFactory
             mappings.AddStructType<decimal>(DataTypeNames.Int2,
                 static (options, mapping, _) => mapping.CreateInfo(options, new Int2Converter<decimal>()));
 
+            // Tinyint (internal, not a real PostgreSQL type)
+            mappings.AddStructType<short>("tinyint",
+                static (options, mapping, _) => mapping.CreateInfo(options, new InternalCharConverter<short>()), MatchRequirement.DataTypeName);
+            mappings.AddStructType<int>("tinyint",
+                static (options, mapping, _) => mapping.CreateInfo(options, new InternalCharConverter<int>()), MatchRequirement.DataTypeName);
+            mappings.AddStructType<long>("tinyint",
+                static (options, mapping, _) => mapping.CreateInfo(options, new InternalCharConverter<long>()), MatchRequirement.DataTypeName);
+            mappings.AddStructType<float>("tinyint",
+                static (options, mapping, _) => mapping.CreateInfo(options, new InternalCharConverter<float>()), MatchRequirement.DataTypeName);
+            mappings.AddStructType<double>("tinyint",
+                static (options, mapping, _) => mapping.CreateInfo(options, new InternalCharConverter<double>()), MatchRequirement.DataTypeName);
+            mappings.AddStructType<decimal>("tinyint",
+                static (options, mapping, _) => mapping.CreateInfo(options, new InternalCharConverter<decimal>()), MatchRequirement.DataTypeName);
+
+
             // Int4
             mappings.AddStructType<short>(DataTypeNames.Int4,
                 static (options, mapping, _) => mapping.CreateInfo(options, new Int4Converter<short>()));
@@ -161,6 +176,14 @@ sealed class ExtraConversionResolverFactory : PgTypeInfoResolverFactory
             mappings.AddStructArrayType<float>(DataTypeNames.Int2);
             mappings.AddStructArrayType<double>(DataTypeNames.Int2);
             mappings.AddStructArrayType<decimal>(DataTypeNames.Int2);
+
+            // Tinyint (internal, not a real PostgreSQL type)
+            mappings.AddStructArrayType<short>("tinyint");
+            mappings.AddStructArrayType<int>("tinyint");
+            mappings.AddStructArrayType<long>("tinyint");
+            mappings.AddStructArrayType<float>("tinyint");
+            mappings.AddStructArrayType<double>("tinyint");
+            mappings.AddStructArrayType<decimal>("tinyint");
 
             // Int4
             mappings.AddStructArrayType<short>(DataTypeNames.Int4);

@@ -10,7 +10,7 @@ sealed class SqlQueryParser
     static NpgsqlParameterCollection EmptyParameters { get; } = [];
 
     readonly Dictionary<string, int> _paramIndexMap = new(StringComparer.OrdinalIgnoreCase);
-    readonly StringBuilder _rewrittenSql = new();
+    readonly StringBuilder _rewrittenSql = new(512);
 
     /// <summary>
     /// <p>
@@ -101,6 +101,7 @@ sealed class SqlQueryParser
         var currTokenBeg = 0;
         var blockCommentLevel = 0;
         var parenthesisLevel = 0;
+        var currentStatementStart = -1;
 
         None:
         if (currCharOfs >= end)
@@ -166,7 +167,7 @@ sealed class SqlQueryParser
             if (IsParamNameChar(ch))
             {
                 if (currCharOfs - 1 > currTokenBeg)
-                    _rewrittenSql.Append(sql, currTokenBeg, currCharOfs - 1 - currTokenBeg);
+                    AppendString(sql, currTokenBeg, currCharOfs - 1 - currTokenBeg);
                 currTokenBeg = currCharOfs++ - 1;
                 goto NamedParam;
             }
@@ -198,7 +199,7 @@ sealed class SqlQueryParser
                         {
                             // Parameter placeholder does not match a parameter on this command.
                             // Leave the text as it was in the SQL, it may not be a an actual placeholder
-                            _rewrittenSql.Append(sql, currTokenBeg, currCharOfs - currTokenBeg);
+                            AppendString(sql, currTokenBeg, currCharOfs - currTokenBeg);
                             currTokenBeg = currCharOfs;
                             if (currCharOfs >= end)
                                 goto Finish;
@@ -209,7 +210,8 @@ sealed class SqlQueryParser
                     }
 
                     if (!parameter.IsInputDirection)
-                        ThrowHelper.ThrowInvalidOperationException("Parameter '{0}' referenced in SQL but is an out-only parameter", paramName);
+                        ThrowHelper.ThrowInvalidOperationException("Parameter '{0}' referenced in SQL but is an out-only parameter",
+                            paramName);
 
                     batchCommand.PositionalParameters.Add(parameter);
                     index = _paramIndexMap[paramName] = batchCommand.PositionalParameters.Count;
@@ -452,8 +454,9 @@ sealed class SqlQueryParser
         goto Finish;
 
         SemiColon:
-        _rewrittenSql.Append(sql, currTokenBeg, currCharOfs - currTokenBeg - 1);
+        AppendString(sql, currTokenBeg, currCharOfs - currTokenBeg - 1);
         batchCommand.FinalCommandText = _rewrittenSql.ToString();
+        batchCommand.PositionInBatch = Math.Max(0, currentStatementStart);
         while (currCharOfs < end)
         {
             ch = sql[currCharOfs];
@@ -468,14 +471,16 @@ sealed class SqlQueryParser
 
             if (command is null)
             {
-                ThrowHelper.ThrowNotSupportedException($"Specifying multiple SQL statements in a single {nameof(NpgsqlBatchCommand)} isn't supported, " +
-                                                       "please remove all semicolons.");
+                ThrowHelper.ThrowNotSupportedException(
+                    $"Specifying multiple SQL statements in a single {nameof(NpgsqlBatchCommand)} isn't supported, " +
+                    "please remove all semicolons.");
             }
 
             statementIndex++;
             MoveToNextBatchCommand();
             _paramIndexMap.Clear();
             _rewrittenSql.Clear();
+            currentStatementStart = -1;
 
             currTokenBeg = currCharOfs;
             goto None;
@@ -485,12 +490,15 @@ sealed class SqlQueryParser
         return;
 
         Finish:
-        _rewrittenSql.Append(sql, currTokenBeg, end - currTokenBeg);
+        AppendString(sql, currTokenBeg, end - currTokenBeg);
         if (statementIndex is 0 && _paramIndexMap.Count is 0)
             // Single statement, no parameters, no rewriting necessary
             batchCommand.FinalCommandText = sql;
         else
+        {
             batchCommand.FinalCommandText = _rewrittenSql.ToString();
+            batchCommand.PositionInBatch = Math.Max(0, currentStatementStart);
+        }
         if (batchCommands is not null && batchCommands.Count > statementIndex + 1)
             batchCommands.RemoveRange(statementIndex + 1, batchCommands.Count - (statementIndex + 1));
 
@@ -508,6 +516,14 @@ sealed class SqlQueryParser
                 batchCommand = new NpgsqlBatchCommand { _parameters = parameters };
                 batchCommands.Add(batchCommand);
             }
+        }
+
+        void AppendString(string str, int start, int length)
+        {
+            if (currentStatementStart == -1)
+                currentStatementStart = start;
+
+            _rewrittenSql.Append(str, start, length);
         }
     }
 

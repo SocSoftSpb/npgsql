@@ -67,6 +67,11 @@ public enum NpgsqlDbType
     /// <remarks>See https://www.postgresql.org/docs/current/static/datatype-money.html</remarks>
     Money = 12,
 
+    /// <summary>
+    /// Corresponds to the PostgreSQL "tinyint" type for the tinyint module.
+    /// </summary>
+    Tinyint = 1001,   // Extension type
+
     #endregion
 
     #region Boolean Type
@@ -612,6 +617,7 @@ static class NpgsqlDbTypeExtensions
         => npgsqlDbType switch
         {
             // Numeric types
+            NpgsqlDbType.Tinyint => DbType.Byte,
             NpgsqlDbType.Smallint => DbType.Int16,
             NpgsqlDbType.Integer => DbType.Int32,
             NpgsqlDbType.Bigint => DbType.Int64,
@@ -653,6 +659,7 @@ static class NpgsqlDbTypeExtensions
         => npgsqlDbType switch
         {
             // Numeric types
+            NpgsqlDbType.Tinyint => "tinyint",
             NpgsqlDbType.Smallint => "int2",
             NpgsqlDbType.Integer  => "int4",
             NpgsqlDbType.Bigint   => "int8",
@@ -879,6 +886,7 @@ static class NpgsqlDbTypeExtensions
             {
                 // Numeric types
                 "int2" => NpgsqlDbType.Smallint,
+                "tinyint" => NpgsqlDbType.Tinyint,
                 "int4" => NpgsqlDbType.Integer,
                 "int8" => NpgsqlDbType.Bigint,
                 "float4" => NpgsqlDbType.Real,

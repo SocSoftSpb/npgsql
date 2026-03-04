@@ -1584,6 +1584,25 @@ FROM
         Assert.That(await cmd.ExecuteScalarAsync(), Is.EqualTo(42));
     }
 
+    [Test]
+    public async Task ExecuteCommandsMustRaiseEvents()
+    {
+        await using var conn = await OpenConnectionAsync();
+        await using var command = new NpgsqlCommand($"SELECT 1; SELECT 2; SELECT 3", conn);
+        var i = 0;
+        command.BatchCommandCompleted += OnBatchCommandCompleted;
+        await command.ExecuteNonQueryAsync();
+        Assert.That(i, Is.EqualTo(3));
+        return;
+
+        void OnBatchCommandCompleted(object sender, NpgsqlBatchCommandCompletedEventArgs e)
+        {
+            i++;
+            Assert.That(e.BatchCommand.Text, Is.EqualTo($"SELECT {i}"));
+        }
+    }
+
+
     [Test, IssueLink("https://github.com/npgsql/npgsql/issues/5218")]
     [Description("Make sure we do not lose unread messages after resetting oversize buffer")]
     public async Task Oversize_buffer_lost_messages()

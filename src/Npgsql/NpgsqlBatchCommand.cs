@@ -18,6 +18,9 @@ public sealed class NpgsqlBatchCommand : DbBatchCommand
     string _commandText;
 
     /// <inheritdoc/>
+    /// <remarks>
+    /// Use <see cref="Text"/> to get the final command text that will be sent to PostgreSQL.
+    /// </remarks>
     [AllowNull]
     public override string CommandText
     {
@@ -138,6 +141,16 @@ public sealed class NpgsqlBatchCommand : DbBatchCommand
     /// placeholders).
     /// </summary>
     internal string? FinalCommandText { get; set; }
+
+    /// <summary>
+    /// Text of the command to be sent to PostgreSQL. This may differ from <see cref="CommandText"/> if Npgsql performs any rewriting.
+    /// </summary>
+    public string Text => FinalCommandText ?? CommandText;
+
+    /// <summary>
+    /// Position of this statement in batch text
+    /// </summary>
+    public int PositionInBatch { get; internal set; }
 
     /// <summary>
     /// The list of parameters, ordered positionally, as it will be sent to PostgreSQL.
@@ -291,7 +304,7 @@ public sealed class NpgsqlBatchCommand : DbBatchCommand
     internal void ResetPreparation() => ConnectorPreparedOn = null;
 
     /// <summary>
-    /// Returns the <see cref="CommandText"/>.
+    /// Returns the <see cref="Text"/>.
     /// </summary>
-    public override string ToString() => CommandText;
+    public override string ToString() => Text;
 }

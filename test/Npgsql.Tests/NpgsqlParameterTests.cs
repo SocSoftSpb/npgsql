@@ -1,6 +1,8 @@
 using NpgsqlTypes;
 using NUnit.Framework;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
@@ -36,6 +38,77 @@ public class NpgsqlParameterTest : TestBase
         p = new NpgsqlParameter("p", new int[0]);
         Assert.That(p.NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Array | NpgsqlDbType.Integer));
         Assert.That(p.DbType, Is.EqualTo(DbType.Object));
+    }
+
+    [Test]
+    public void CanQueryWithArrayParameter()
+    {
+        using var conn = OpenConnection();
+
+        conn.ExecuteNonQuery("CREATE TEMP TABLE temp_table (id bigint);");
+        conn.ExecuteNonQuery("INSERT INTO temp_table (id) VALUES (8), (10);");
+
+        using var cmd = new NpgsqlCommand("SELECT * FROM temp_table WHERE id = ANY(@p);", conn);
+
+        var value = new[] { 8L, 10L };
+        var p1 = new NpgsqlParameter { ParameterName = "p", Value = value };
+        cmd.Parameters.Add(p1);
+
+        using var reader = cmd.ExecuteReader();
+        Assert.That(reader.Read(), Is.True);
+    }
+
+    private sealed class MyList<T> : IList<T>
+    {
+        readonly List<T> _list = new();
+        public IEnumerator<T> GetEnumerator() => _list.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)_list).GetEnumerator();
+
+        public void Add(T item) => _list.Add(item);
+
+        public void Clear() => _list.Clear();
+
+        public bool Contains(T item) => _list.Contains(item);
+
+        public void CopyTo(T[] array, int arrayIndex) => _list.CopyTo(array, arrayIndex);
+
+        public bool Remove(T item) => _list.Remove(item);
+
+        public int Count => _list.Count;
+
+        public bool IsReadOnly => false;
+
+        public int IndexOf(T item) => _list.IndexOf(item);
+
+        public void Insert(int index, T item) => _list.Insert(index, item);
+
+        public void RemoveAt(int index) => _list.RemoveAt(index);
+
+        public T this[int index]
+        {
+            get => _list[index];
+            set => _list[index] = value;
+        }
+    }
+
+    [Test]
+    public void CanQueryWithIListParameter()
+    {
+        using var conn = OpenConnection();
+
+        conn.ExecuteNonQuery("CREATE TEMP TABLE temp_table (id bigint);");
+        conn.ExecuteNonQuery("INSERT INTO temp_table (id) VALUES (8), (10);");
+
+        using var cmd = new NpgsqlCommand("SELECT * FROM temp_table WHERE id = ANY(@p);", conn);
+
+        var value = new MyList<long> { 8L, 10L };
+        var p1 = new NpgsqlParameter("p", NpgsqlDbType.Array | NpgsqlDbType.Bigint);
+        p1.Value = value;
+        cmd.Parameters.Add(p1);
+
+        using var reader = cmd.ExecuteReader();
+        Assert.That(reader.Read(), Is.True);
     }
 
     [Test]

@@ -110,11 +110,13 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';");
 
-        var ex = Assert.ThrowsAsync<PostgresException>(() => conn.ExecuteNonQueryAsync($"SELECT * FROM {raiseExceptionFunc}()"))!;
+        var commandText = $"SELECT * FROM {raiseExceptionFunc}()";
+        var ex = Assert.ThrowsAsync<PostgresException>(() => conn.ExecuteNonQueryAsync(commandText))!;
         Assert.That(ex.Detail, Does.Contain("secret"));
         Assert.That(ex.Message, Does.Contain("secret"));
         Assert.That(ex.Data[nameof(PostgresException.Detail)], Does.Contain("secret"));
         Assert.That(ex.ToString(), Does.Contain("secret"));
+        Assert.That(ex.BatchCommand?.Text, Is.EqualTo(commandText));
 
         PostgresNotice? notice = null;
         conn.Notice += (____, a) => notice = a.Notice;
@@ -129,6 +131,8 @@ $$ LANGUAGE 'plpgsql';");
 
         var ex = Assert.ThrowsAsync<PostgresException>(() => conn.ExecuteNonQueryAsync("SELECT 1; SELECT * FROM \"NonExistingTable\""))!;
         Assert.That(ex.Message, Does.Contain("POSITION: 15"));
+        Assert.That(ex.BatchCommand?.Text, Is.EqualTo("SELECT * FROM \"NonExistingTable\""));
+        Assert.That(ex.BatchCommand?.PositionInBatch, Is.EqualTo(10));
     }
 
     [Test]
