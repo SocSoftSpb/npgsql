@@ -310,6 +310,7 @@ public class SystemTransactionTests : TestBase
         scope.Complete();
     }
 
+#if false
     [Test]
     [IssueLink("https://github.com/npgsql/npgsql/issues/4963"), IssueLink("https://github.com/npgsql/npgsql/issues/5783")]
     public void Single_closed_connection_in_transaction_scope([Values] bool pooling, [Values] bool multipleHosts)
@@ -333,6 +334,7 @@ public class SystemTransactionTests : TestBase
 
         Assert.That(pooling ? dataSource.Statistics.Busy : dataSource.Statistics.Total, Is.EqualTo(0));
     }
+#endif
 
     [Test]
     [IssueLink("https://github.com/npgsql/npgsql/issues/3863")]

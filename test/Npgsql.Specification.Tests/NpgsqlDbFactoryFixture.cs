@@ -9,7 +9,7 @@ public class NpgsqlDbFactoryFixture : IDbFactoryFixture
     public DbProviderFactory Factory => NpgsqlFactory.Instance;
 
     const string DefaultConnectionString =
-        "Server=localhost;Username=npgsql_tests;Password=npgsql_tests;Database=npgsql_tests;Timeout=0;Command Timeout=0";
+        "Host=REDOS-PG-UL;Username=postgres;Password=admin;Database=npgsql_tests;Timeout=0;Command Timeout=0";
 
     public string ConnectionString =>
         Environment.GetEnvironmentVariable("NPGSQL_TEST_DB") ?? DefaultConnectionString;

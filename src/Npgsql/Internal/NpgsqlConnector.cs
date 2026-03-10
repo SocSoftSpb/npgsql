@@ -1780,7 +1780,14 @@ public sealed partial class NpgsqlConnector
                     certs.ImportFromPemFile(certRootPath);
 
                 if (certs.Count == 0)
+                {
+#if NET9_0_OR_GREATER
+                    // This is not a PEM certificate, probably PFX
+                    certs.Add(X509CertificateLoader.LoadPkcs12FromFile(certRootPath, null));
+#else
                     certs.Add(new X509Certificate2(certRootPath));
+#endif
+                }
             }
 
             chain.ChainPolicy.CustomTrustStore.AddRange(certs);

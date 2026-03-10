@@ -210,7 +210,9 @@ public class NumericTests(MultiplexingMode multiplexingMode) : MultiplexingTestB
         await rdr.ReadAsync();
         var value = rdr.GetFieldValue<decimal>(0);
 
+#if !NET6_0
         Assert.That(value.Scale, Is.EqualTo(2));
+#endif
     }
 
     [Test, IssueLink("https://github.com/npgsql/npgsql/issues/6383")]

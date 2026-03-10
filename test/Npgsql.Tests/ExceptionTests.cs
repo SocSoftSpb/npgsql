@@ -216,6 +216,7 @@ $$ LANGUAGE 'plpgsql';");
 
 #pragma warning disable SYSLIB0051
 #pragma warning disable 618
+#if !NET10_0_OR_GREATER
     [Test]
     public void PostgresException_IsTransient()
     {
@@ -249,11 +250,13 @@ $$ LANGUAGE 'plpgsql';");
             return new PostgresException(info, default);
         }
     }
+#endif
 #pragma warning restore SYSLIB0051
 #pragma warning restore 618
 
 #pragma warning disable SYSLIB0011
 #pragma warning disable SYSLIB0050
+#if !NET10_0_OR_GREATER
     [Test]
     public void Serialization()
     {
@@ -289,9 +292,11 @@ $$ LANGUAGE 'plpgsql';");
     }
 
     SerializationInfo CreateSerializationInfo() => new(typeof(PostgresException), new FormatterConverter());
+#endif
 #pragma warning restore SYSLIB0011
 
 #pragma warning disable SYSLIB0051
+#if !NET10_0_OR_GREATER
     [Test]
     [IssueLink("https://github.com/npgsql/npgsql/issues/3204")]
     public void Base_exception_property_serialization()
@@ -309,5 +314,6 @@ $$ LANGUAGE 'plpgsql';");
         Assert.That(ex.Source, Is.EqualTo(info.GetValue("Source", typeof(string))));
         Assert.That(ex.StackTrace, Is.EqualTo(info.GetValue("StackTraceString", typeof(string))));
     }
+#endif
 #pragma warning restore SYSLIB0051
 }

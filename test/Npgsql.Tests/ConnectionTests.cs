@@ -783,6 +783,7 @@ public class ConnectionTests(MultiplexingMode multiplexingMode) : MultiplexingTe
         }
     }
 
+#if !NET6_0
     [Test]
     [IssueLink("https://github.com/npgsql/npgsql/issues/4603")]
     public async Task Reload_types_keepalive_concurrent()
@@ -798,6 +799,7 @@ public class ConnectionTests(MultiplexingMode multiplexingMode) : MultiplexingTe
         while (Stopwatch.GetElapsedTime(startTimestamp).TotalSeconds < 2)
             Assert.DoesNotThrow(conn.ReloadTypes);
     }
+#endif
 
     #region ChangeDatabase
 

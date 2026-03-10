@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Text;
 using NUnit.Framework;
 
@@ -8,6 +9,7 @@ namespace Npgsql.Tests;
 
 public class LargeObjectTests : TestBase
 {
+#if !NET6_0
     [Test]
     public void Test()
     {
@@ -19,7 +21,7 @@ public class LargeObjectTests : TestBase
         {
             var buf = Encoding.UTF8.GetBytes("Hello");
             stream.Write(buf, 0, buf.Length);
-            stream.Seek(0, System.IO.SeekOrigin.Begin);
+            stream.Seek(0, SeekOrigin.Begin);
             var buf2 = new byte[buf.Length];
             stream.ReadExactly(buf2, 0, buf2.Length);
             Assert.That(buf.SequenceEqual(buf2));
@@ -28,13 +30,13 @@ public class LargeObjectTests : TestBase
 
             Assert.AreEqual(5, stream.Length);
 
-            stream.Seek(-1, System.IO.SeekOrigin.Current);
+            stream.Seek(-1, SeekOrigin.Current);
             Assert.AreEqual((int)'o', stream.ReadByte());
 
             manager.MaxTransferBlockSize = 3;
 
             stream.Write(buf, 0, buf.Length);
-            stream.Seek(-5, System.IO.SeekOrigin.End);
+            stream.Seek(-5, SeekOrigin.End);
             var buf3 = new byte[100];
             Assert.AreEqual(5, stream.Read(buf3, 0, 100));
             Assert.That(buf.SequenceEqual(buf3.Take(5)));
@@ -47,4 +49,5 @@ public class LargeObjectTests : TestBase
 
         transaction.Rollback();
     }
+#endif
 }

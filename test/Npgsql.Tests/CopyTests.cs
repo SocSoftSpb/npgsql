@@ -753,7 +753,9 @@ INSERT INTO {table} (field_text, field_int4) VALUES ('HELLO', 8)");
                 {
                     var str = reader.Read<string>();
                     Assert.That(str.Length, Is.EqualTo(len));
+#if !NET6_0
                     Assert.True(str.AsSpan().IndexOfAnyExcept('x') is -1);
+#endif
                 }
             }
             Assert.That(row, Is.EqualTo(100));
@@ -969,6 +971,7 @@ INSERT INTO {table} (bits, bitvector, bitarray) VALUES (B'00000001101', B'000000
         Assert.Throws<InvalidOperationException>(() => writer.WriteRow("Hello", 8, "I should not be here"));
     }
 
+#if !NET6_0
     [Test]
     public async Task Cancel_raw_binary_export_when_not_consumed_and_then_Dispose()
     {
@@ -984,6 +987,7 @@ INSERT INTO {table} (bits, bitvector, bitarray) VALUES (B'00000001101', B'000000
         }
         Assert.That(async () => await conn.ExecuteScalarAsync("SELECT 1"), Is.EqualTo(1), "The connection is still OK");
     }
+#endif
 
     [Test]
     public async Task Cancel_binary_export_when_not_consumed_and_then_Dispose()

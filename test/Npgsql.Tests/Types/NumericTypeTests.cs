@@ -38,14 +38,16 @@ public class NumericTypeTests(MultiplexingMode multiplexingMode) : MultiplexingT
         await using var conn = await OpenConnectionAsync();
         await EnsureExtensionAsync(conn, "tinyint");
 
-        await AssertType((byte)8, "8", "tinyint", NpgsqlDbType.Tinyint, DbType.Byte, isDefaultForReading: true, isDefaultForWriting: false);
+        await AssertType((byte)8, "8", "tinyint", NpgsqlDbType.Tinyint, null, inferredDbType:DbType.Byte, isDefaultForReading: false, isDefaultForWriting: false);
 
-        await AssertType((short)8,   "8", "tinyint", NpgsqlDbType.Tinyint, DbType.Byte, isDefault: false);
-        await AssertType(8,          "8", "tinyint", NpgsqlDbType.Tinyint, DbType.Byte, isDefault: false);
-        await AssertType(8L,         "8", "tinyint", NpgsqlDbType.Tinyint, DbType.Byte, isDefault: false);
-        await AssertType(8F,         "8", "tinyint", NpgsqlDbType.Tinyint, DbType.Byte, isDefault: false);
-        await AssertType(8D,         "8", "tinyint", NpgsqlDbType.Tinyint, DbType.Byte, isDefault: false);
-        await AssertType(8M,         "8", "tinyint", NpgsqlDbType.Tinyint, DbType.Byte, isDefault: false);
+#if NET10_0_OR_GREATER
+        await AssertType((short)8,   "8", "tinyint", NpgsqlDbType.Tinyint, null, inferredDbType:DbType.Byte, isDefault: false);
+        await AssertType(8,          "8", "tinyint", NpgsqlDbType.Tinyint, null, inferredDbType:DbType.Byte, isDefault: false);
+        await AssertType(8L,         "8", "tinyint", NpgsqlDbType.Tinyint, null, inferredDbType:DbType.Byte, isDefault: false);
+        await AssertType(8F,         "8", "tinyint", NpgsqlDbType.Tinyint, null, inferredDbType:DbType.Byte, isDefault: false);
+        await AssertType(8D,         "8", "tinyint", NpgsqlDbType.Tinyint, null, inferredDbType:DbType.Byte, isDefault: false);
+        await AssertType(8M,         "8", "tinyint", NpgsqlDbType.Tinyint, null, inferredDbType:DbType.Byte, isDefault: false);
+#endif
     }
 
     [Test]

@@ -61,6 +61,7 @@ class NetworkTypeTests(MultiplexingMode multiplexingMode) : MultiplexingTestBase
             NpgsqlDbType.Cidr,
             isDefaultForWriting: false);
 
+#if !NET6_0
     [Test]
     public Task IPNetwork_as_cidr()
         => AssertType(
@@ -70,6 +71,7 @@ class NetworkTypeTests(MultiplexingMode multiplexingMode) : MultiplexingTestBase
             NpgsqlDbType.Cidr,
             isDefaultForWriting: false,
             isDefaultForReading: false);
+#endif
 
     [Test]
     public Task Inet_v4_as_NpgsqlInet()

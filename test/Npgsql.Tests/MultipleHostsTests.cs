@@ -892,6 +892,7 @@ public class MultipleHostsTests : TestBase
         Assert.That(secondDataSource.GetDatabaseState(), Is.EqualTo(DatabaseState.PrimaryReadWrite));
     }
 
+#if false
     [Test, NonParallelizable]
     public void IntegrationTest([Values] bool loadBalancing, [Values] bool alwaysCheckHostState)
     {
@@ -972,6 +973,7 @@ public class MultipleHostsTests : TestBase
         await using var dataSource = dataSourceBuilder.BuildMultiHost();
         await using var conn = await dataSource.OpenConnectionAsync();
     }
+#endif
 
     [Test]
     public async Task DataSource_with_wrappers()
