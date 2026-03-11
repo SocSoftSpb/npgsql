@@ -22,7 +22,7 @@ static class Statics
     static Statics()
     {
         EnableAssertions = AppContext.TryGetSwitch("Npgsql.EnableAssertions", out var enabled) && enabled;
-        LegacyTimestampBehavior = AppContext.TryGetSwitch("Npgsql.EnableLegacyTimestampBehavior", out enabled) && enabled;
+        LegacyTimestampBehavior = !AppContext.TryGetSwitch("Npgsql.EnableLegacyTimestampBehavior", out enabled) || enabled;
         DisableDateTimeInfinityConversions = AppContext.TryGetSwitch("Npgsql.DisableDateTimeInfinityConversions", out enabled) && enabled;
     }
 
