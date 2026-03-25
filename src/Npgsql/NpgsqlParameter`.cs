@@ -145,5 +145,6 @@ public sealed class NpgsqlParameter<T> : NpgsqlParameter
             SourceVersion = SourceVersion,
             TypedValue = TypedValue,
             SourceColumnNullMapping = SourceColumnNullMapping,
+            _isByteTypeNeedResolve = _isByteTypeNeedResolve,
         };
 }

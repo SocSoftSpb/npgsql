@@ -253,7 +253,11 @@ public sealed class NpgsqlBinaryImporter : ICancelable
                 newParam = true;
                 param = new NpgsqlParameter<T>();
                 if (npgsqlDbType is not null)
+                {
                     param._npgsqlDbType = npgsqlDbType;
+                    param._isByteTypeNeedResolve = false;
+                }
+
                 if (dataTypeName is not null)
                     param._dataTypeName = dataTypeName;
             }
@@ -273,7 +277,11 @@ public sealed class NpgsqlBinaryImporter : ICancelable
                 {
                     param.ResetDbType();
                     if (npgsqlDbType is not null)
+                    {
                         param._npgsqlDbType = npgsqlDbType;
+                        param._isByteTypeNeedResolve = false;
+                    }
+
                     if (dataTypeName is not null)
                         param._dataTypeName = dataTypeName;
                 }

@@ -109,6 +109,9 @@ public static class TestUtil
     public static Task EnsureExtensionAsync(NpgsqlConnection conn, string extension, string? minVersion = null)
         => EnsureExtension(conn, extension, minVersion, async: true);
 
+    public static Task DropExtensionAsync(NpgsqlConnection conn, string extension, string? minVersion = null)
+        => DropExtension(conn, extension, minVersion, async: true);
+
     static async Task EnsureExtension(NpgsqlConnection conn, string extension, string? minVersion, bool async)
     {
         if (minVersion != null && !MinimumPgVersion(conn, minVersion, $"The extension '{extension}' only works for PostgreSQL {minVersion} and higher."))
@@ -123,6 +126,30 @@ public static class TestUtil
                 await conn.ExecuteNonQueryAsync($"CREATE EXTENSION IF NOT EXISTS {extension}");
             else
                 conn.ExecuteNonQuery($"CREATE EXTENSION IF NOT EXISTS {extension}");
+        }
+        catch (PostgresException ex) when (ex.ConstraintName == "pg_extension_name_index")
+        {
+            // The extension is already installed, but we can race across threads.
+            // https://stackoverflow.com/questions/63104126/create-extention-if-not-exists-doesnt-really-check-if-extention-does-not-exis
+        }
+
+        conn.ReloadTypes();
+    }
+
+    static async Task DropExtension(NpgsqlConnection conn, string extension, string? minVersion, bool async)
+    {
+        if (minVersion != null && !MinimumPgVersion(conn, minVersion, $"The extension '{extension}' only works for PostgreSQL {minVersion} and higher."))
+            return;
+
+        if (conn.PostgreSqlVersion < MinCreateExtensionVersion)
+            Assert.Ignore($"The 'DROP EXTENSION' command only works for PostgreSQL {MinCreateExtensionVersion} and higher.");
+
+        try
+        {
+            if (async)
+                await conn.ExecuteNonQueryAsync($"DROP EXTENSION IF EXISTS {extension}");
+            else
+                conn.ExecuteNonQuery($"DROP EXTENSION IF EXISTS {extension}");
         }
         catch (PostgresException ex) when (ex.ConstraintName == "pg_extension_name_index")
         {

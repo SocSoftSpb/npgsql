@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Npgsql.Tests.Support;
+using Npgsql.Util;
 using NpgsqlTypes;
 using NUnit.Framework;
 
@@ -26,6 +27,11 @@ public abstract class TestBase
     static readonly object dataSourceLockObject = new();
 
     static ConcurrentDictionary<string, NpgsqlDataSource> DataSources = new(StringComparer.Ordinal);
+
+    static TestBase()
+    {
+        Statics.LegacyTimestampBehavior = false;
+    }
 
     #region Type testing
 

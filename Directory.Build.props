@@ -1,6 +1,6 @@
 ﻿<Project>
   <PropertyGroup>
-    <VersionPrefix>9.0.5.3</VersionPrefix>
+    <VersionPrefix>9.0.5.4</VersionPrefix>
     <LangVersion>latest</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Nullable>enable</Nullable>
@@ -9,6 +9,8 @@
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)Npgsql.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+    <RestoreEnablePackagePruning>false</RestoreEnablePackagePruning>
 
     <Copyright>Copyright 2025 © The Npgsql Development Team</Copyright>
     <Company>Npgsql</Company>

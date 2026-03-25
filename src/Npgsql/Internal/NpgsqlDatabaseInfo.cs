@@ -112,6 +112,13 @@ public abstract class NpgsqlDatabaseInfo
     /// </summary>
     public virtual bool SupportsTransactions { get; protected set; } = true;
 
+    /// <summary>
+    /// Gets the PostgreSQL type information associated with the tinyint database type, if available.
+    /// </summary>
+    /// <remarks>If the database doesn't have a tinyint type, this property will be <c>null</c>.</remarks>
+    public PostgresType? TinyintType { get; private set; }
+
+
     #endregion Supported capabilities and features
 
     #region Types
@@ -244,6 +251,9 @@ public abstract class NpgsqlDatabaseInfo
             ByName[type.InternalName] = ByName.ContainsKey(type.InternalName)
                 ? null
                 : type;
+
+            if (type.InternalName == "tinyint")
+                TinyintType = type;
 
             switch (type)
             {

@@ -11,11 +11,10 @@ namespace Npgsql.Util;
 static class Statics
 {
     internal static readonly bool EnableAssertions;
-#if DEBUG
     internal static bool LegacyTimestampBehavior;
+#if DEBUG
     internal static bool DisableDateTimeInfinityConversions;
 #else
-    internal static readonly bool LegacyTimestampBehavior;
     internal static readonly bool DisableDateTimeInfinityConversions;
 #endif
 

@@ -29,6 +29,11 @@ sealed partial class AdoTypeInfoResolverFactory : PgTypeInfoResolverFactory
 
         public PgTypeInfo? GetTypeInfo(Type? type, DataTypeName? dataTypeName, PgSerializerOptions options)
         {
+            if (dataTypeName == null && type == typeof(byte) && options.DatabaseInfo.TinyintType != null)
+            {
+                dataTypeName = options.DatabaseInfo.TinyintType.DataTypeName;
+            }
+
             var info = Mappings.Find(type, dataTypeName, options);
             if (info is null && dataTypeName is not null)
                 info = GetEnumTypeInfo(type, dataTypeName.GetValueOrDefault(), options);

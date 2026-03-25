@@ -50,6 +50,7 @@ public class NpgsqlParameter : DbParameter, IDbDataParameter, ICloneable
     private protected object? _writeState;
     private protected Size _bufferRequirement;
     private protected bool _asObject;
+    internal bool _isByteTypeNeedResolve;  // Used to delay resolution of byte (DbType.Byte) parameters until execution / preparing, so we can distinguish between tinyint and smallint.
 
     #endregion
 
@@ -335,6 +336,8 @@ public class NpgsqlParameter : DbParameter, IDbDataParameter, ICloneable
                 ? null
                 : value.ToNpgsqlDbType()
                   ?? throw new NotSupportedException($"The parameter type DbType.{value} isn't supported by PostgreSQL or Npgsql");
+
+            _isByteTypeNeedResolve = (value == DbType.Byte && _npgsqlDbType == NpgsqlDbType.Smallint);
         }
     }
 
@@ -371,6 +374,7 @@ public class NpgsqlParameter : DbParameter, IDbDataParameter, ICloneable
 
             ResetTypeInfo();
             _npgsqlDbType = value;
+            _isByteTypeNeedResolve = false;
         }
     }
 
@@ -532,6 +536,19 @@ public class NpgsqlParameter : DbParameter, IDbDataParameter, ICloneable
         var previouslyResolved = ReferenceEquals(typeInfo?.Options, options);
         if (!previouslyResolved)
         {
+            if (_npgsqlDbType == NpgsqlDbType.Smallint && _isByteTypeNeedResolve)
+            {
+                // If the backend provides an unsigned 1-byte integer type (extension "tinyint"), prefer
+                // that type over smallint for parameters that were specified as DbType.Byte.
+                // We do this by switching the requested NpgsqlDbType to Tinyint so subsequent resolution
+                // will target the backend tinyint type.
+                if (options.DatabaseInfo.TinyintType != null)
+                {
+                    _npgsqlDbType = NpgsqlDbType.Tinyint;
+                    _isByteTypeNeedResolve = false;
+                }
+            }
+
             var dataTypeName =
                 _npgsqlDbType is { } npgsqlDbType
                     ? npgsqlDbType.ToDataTypeName() ?? npgsqlDbType.ToUnqualifiedDataTypeNameOrThrow()
@@ -749,6 +766,7 @@ public class NpgsqlParameter : DbParameter, IDbDataParameter, ICloneable
     public override void ResetDbType()
     {
         _npgsqlDbType = null;
+        _isByteTypeNeedResolve = false;
         _dataTypeName = null;
         ResetTypeInfo();
     }
@@ -818,6 +836,7 @@ public class NpgsqlParameter : DbParameter, IDbDataParameter, ICloneable
             SourceVersion = SourceVersion,
             _value = _value,
             SourceColumnNullMapping = SourceColumnNullMapping,
+            _isByteTypeNeedResolve = _isByteTypeNeedResolve,
         };
 
     object ICloneable.Clone() => Clone();
