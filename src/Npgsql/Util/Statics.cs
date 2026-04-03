@@ -12,17 +12,13 @@ static class Statics
 {
     internal static readonly bool EnableAssertions;
     internal static bool LegacyTimestampBehavior;
-#if DEBUG
     internal static bool DisableDateTimeInfinityConversions;
-#else
-    internal static readonly bool DisableDateTimeInfinityConversions;
-#endif
 
     static Statics()
     {
         EnableAssertions = AppContext.TryGetSwitch("Npgsql.EnableAssertions", out var enabled) && enabled;
         LegacyTimestampBehavior = !AppContext.TryGetSwitch("Npgsql.EnableLegacyTimestampBehavior", out enabled) || enabled;
-        DisableDateTimeInfinityConversions = AppContext.TryGetSwitch("Npgsql.DisableDateTimeInfinityConversions", out enabled) && enabled;
+        DisableDateTimeInfinityConversions = !AppContext.TryGetSwitch("Npgsql.DisableDateTimeInfinityConversions", out enabled) || enabled;
     }
 
     /// Returns the escaped SQL representation of a string literal.

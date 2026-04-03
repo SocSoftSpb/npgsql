@@ -31,6 +31,7 @@ public abstract class TestBase
     static TestBase()
     {
         Statics.LegacyTimestampBehavior = false;
+        Statics.DisableDateTimeInfinityConversions = false;
     }
 
     #region Type testing

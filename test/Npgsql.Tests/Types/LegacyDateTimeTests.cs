@@ -1,9 +1,10 @@
-using System;
-using System.Data;
-using System.Threading.Tasks;
 using Npgsql.Internal.ResolverFactories;
 using NpgsqlTypes;
 using NUnit.Framework;
+using System;
+using System.Data;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using static Npgsql.Util.Statics;
 
 namespace Npgsql.Tests.Types;

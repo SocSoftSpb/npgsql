@@ -14,7 +14,7 @@ sealed class LegacyDateTimeConverter(bool dateTimeInfinityConversions, bool time
     {
         if (timestamp)
         {
-            return PgTimestamp.Decode(reader.ReadInt64(), DateTimeKind.Unspecified, dateTimeInfinityConversions);
+            return PgTimestamp.Decode(reader.ReadInt64(), DateTimeKind.Unspecified, true);
         }
 
         var dateTime = PgTimestamp.Decode(reader.ReadInt64(), DateTimeKind.Utc, dateTimeInfinityConversions);
